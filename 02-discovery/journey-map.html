@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Future-state journey map: variable-income consumers</title>
+<style>
+:root{
+  --ink:#1b2a36;
+  --muted:#5b6b78;
+  --line:#c9d3da;
+  --paper:#ffffff;
+  --wash:#f2f6f8;
+  --route:#0e6b66;
+  --route-soft:#dcefed;
+  --flag:#8a4b00;
+  --flag-soft:#fbeed8;
+  --serif:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.5}
+.page{max-width:1180px;margin:0 auto;padding:28px 28px 24px}
+header{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:end;border-bottom:2px solid var(--ink);padding-bottom:16px}
+h1{font-family:var(--serif);font-weight:700;font-size:30px;line-height:1.15;margin:0;letter-spacing:-0.01em}
+.sub{margin:6px 0 0;color:var(--muted);font-size:13px}
+.brief{margin:0;font-size:13px;color:var(--ink)}
+.brief b{font-weight:600}
+.brief span{display:block;margin-top:4px;color:var(--muted)}
+
+.route{position:relative;margin-top:22px}
+.stages{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;position:relative;list-style:none;padding:0;margin:0}
+.stages::before{content:"";position:absolute;left:16px;right:16px;top:15px;height:3px;background:var(--route);border-radius:2px}
+.stage{position:relative;padding-top:0}
+.stop{position:relative;z-index:1;display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.stop i{font-style:normal;flex:none;width:32px;height:32px;border-radius:50%;background:var(--route);color:#fff;font-weight:600;display:flex;align-items:center;justify-content:center;border:3px solid var(--paper)}
+.stop h2{font-family:var(--serif);font-size:18px;margin:0;background:var(--paper);padding-right:8px;line-height:1.2}
+.card{border:1px solid var(--line);border-radius:6px;padding:12px 13px;background:var(--paper);height:calc(100% - 44px)}
+.lbl{font-size:12px;font-weight:600;color:var(--route);margin:12px 0 2px}
+.lbl:first-child{margin-top:0}
+.card p{margin:0;font-size:13px}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.tag{font-size:11.5px;background:var(--flag-soft);color:var(--flag);border-radius:3px;padding:1px 6px;font-weight:500}
+.pain{font-size:13px;color:var(--ink)}
+ul.ab{list-style:none;margin:0;padding:0;border-top:1px solid var(--line);margin-top:12px;padding-top:8px}
+ul.ab li{font-size:12.5px;padding:4px 0;line-height:1.4}
+ul.ab .a{font-weight:600}
+ul.ab .ar{color:var(--route);font-weight:700;margin:0 3px}
+
+.arc{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:12px}
+.arc div{background:var(--route-soft);color:#08403c;text-align:center;font-size:13px;font-weight:600;padding:6px 4px;border-radius:4px}
+.arc-cap{font-size:12px;color:var(--muted);margin:4px 0 0}
+
+.adv{margin-top:22px;border-top:2px solid var(--ink);padding-top:14px}
+.adv h3{font-family:var(--serif);font-size:18px;margin:0 0 10px}
+.advgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.advgrid div{background:var(--wash);border-radius:6px;padding:11px 13px}
+.advgrid b{display:block;font-size:13.5px;margin-bottom:3px}
+.advgrid p{margin:0;font-size:12.5px;color:var(--muted)}
+
+footer{margin-top:16px;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px}
+footer p{margin:2px 0}
+
+@media (max-width:900px){
+  header{grid-template-columns:1fr}
+  .stages{grid-template-columns:1fr;gap:20px}
+  .stages::before{left:15px;right:auto;top:0;bottom:0;width:3px;height:auto}
+  .card{height:auto;margin-left:42px}
+  .arc{grid-template-columns:repeat(2,1fr)}
+  .advgrid{grid-template-columns:1fr}
+}
+@media print{
+  @page{size:A4 landscape;margin:10mm}
+  body{font-size:11px}
+  .page{padding:0;max-width:none}
+  h1{font-size:22px}
+  .card p,ul.ab li{font-size:10.5px}
+  .tag{font-size:9.5px}
+  .advgrid p,.advgrid b{font-size:10.5px}
+  footer{font-size:9.5px}
+  .lbl{margin-top:8px}
+  .adv{margin-top:12px}
+  .route{margin-top:14px}
+}
+</style>
+</head>
+<body>
+<main class="page">
+
+<header>
+  <div>
+    <h1>Future-state journey: a plan they understand and can keep</h1>
+    <p class="sub">Variable-income consumers, about 34% of journey starters. German portal, BU Collection.</p>
+  </div>
+  <p class="brief"><b>Goal:</b> set up a payment plan they can realistically keep, so the collection letters stop and the debt does not grow.
+    <span><b>Move:</b> from "get the consumer to a plan quickly" to "help the consumer choose a plan they understand and can keep".</span></p>
+</header>
+
+<section class="route" aria-label="Four-stage future-state journey">
+  <ol class="stages">
+
+    <li class="stage">
+      <div class="stop"><i>1</i><h2>Orient</h2></div>
+      <div class="card">
+        <div class="lbl">User action</div>
+        <p>Opens the portal on a break and sees all open claims in one combined total.</p>
+        <div class="lbl">Internal state</div>
+        <p>Wary, short on time, unsure what is expected.</p>
+        <div class="lbl">Pain point addressed</div>
+        <p class="pain">Claims shown separately; no stated purpose for the questions.</p>
+        <div class="tags"><span class="tag">T-202</span><span class="tag">N-03</span><span class="tag">T-206</span></div>
+        <ul class="ab">
+          <li><span class="a">Show all open claims in one total</span><span class="ar">&rarr;</span>no manual adding up.</li>
+          <li><span class="a">State upfront why income is asked</span><span class="ar">&rarr;</span>less fear before the question.</li>
+        </ul>
+      </div>
+    </li>
+
+    <li class="stage">
+      <div class="stop"><i>2</i><h2>Share income</h2></div>
+      <div class="card">
+        <div class="lbl">User action</div>
+        <p>Answers an income question with a plain definition and an irregular-pay option.</p>
+        <div class="lbl">Internal state</div>
+        <p>Anxious about misuse, becoming reassured.</p>
+        <div class="lbl">Pain point addressed</div>
+        <p class="pain">"This month or a normal month" ambiguity; fear of misuse; answers lost on going back.</p>
+        <div class="tags"><span class="tag">N-01</span><span class="tag">N-06</span><span class="tag">T-206</span><span class="tag">T-204</span></div>
+        <ul class="ab">
+          <li><span class="a">Define income as a typical month, with irregular-pay option</span><span class="ar">&rarr;</span>no guessing.</li>
+          <li><span class="a">Show retention period beside the field</span><span class="ar">&rarr;</span>lowers fear of misuse.</li>
+          <li><span class="a">Keep answers when going back</span><span class="ar">&rarr;</span>no re-entry of sensitive data.</li>
+        </ul>
+      </div>
+    </li>
+
+    <li class="stage">
+      <div class="stop"><i>3</i><h2>Choose plan</h2></div>
+      <div class="card">
+        <div class="lbl">User action</div>
+        <p>Compares plans filtered by affordability, each showing due date and missed-payment outcome.</p>
+        <div class="lbl">Internal state</div>
+        <p>Cautious, becoming informed.</p>
+        <div class="lbl">Pain point addressed</div>
+        <p class="pain">Picking the plan that "looked right"; no missed-payment consequences shown.</p>
+        <div class="tags"><span class="tag">N-02</span><span class="tag">T-208</span></div>
+        <ul class="ab">
+          <li><span class="a">Run affordability check before plan options</span><span class="ar">&rarr;</span>instalments fit the budget.</li>
+          <li><span class="a">Align due dates to pay day</span><span class="ar">&rarr;</span>fewer early missed payments.</li>
+          <li><span class="a">Show missed-payment consequences per plan</span><span class="ar">&rarr;</span>a decision, not a bet.</li>
+          <li><span class="a">Stop defaulting to the shortest plan</span><span class="ar">&rarr;</span>no "looks right" shortcut.</li>
+        </ul>
+      </div>
+    </li>
+
+    <li class="stage">
+      <div class="stop"><i>4</i><h2>Commit or hand off</h2></div>
+      <div class="card">
+        <div class="lbl">User action</div>
+        <p>Confirms one plan across all claims, or calls an agent who already sees the context.</p>
+        <div class="lbl">Internal state</div>
+        <p>Confident, or wants human reassurance.</p>
+        <div class="lbl">Pain point addressed</div>
+        <p class="pain">Repeating details to agents; no record of why a plan was offered; late first reminder.</p>
+        <div class="tags"><span class="tag">N-08</span><span class="tag">N-09</span><span class="tag">T-205</span><span class="tag">T-207</span></div>
+        <ul class="ab">
+          <li><span class="a">Confirm one plan across all claims</span><span class="ar">&rarr;</span>one clear commitment.</li>
+          <li><span class="a">Send first-instalment reminder before due date</span><span class="ar">&rarr;</span>fewer early misses.</li>
+          <li><span class="a">Give agents entered data and plan rationale</span><span class="ar">&rarr;</span>no repeated questions.</li>
+        </ul>
+      </div>
+    </li>
+
+  </ol>
+
+  <div class="arc" aria-label="Intended emotional arc">
+    <div>Wary</div><div>Reassured</div><div>Informed</div><div>Confident</div>
+  </div>
+  <p class="arc-cap">Intended emotional arc across the four stages.</p>
+</section>
+
+<section class="adv" aria-labelledby="adv-h">
+  <h3 id="adv-h">Three advantages over the manual workaround</h3>
+  <div class="advgrid">
+    <div><b>1. Affordability is calculated in the journey</b><p>The consumer no longer rebuilds the check from statements and payslips, where a misjudged "normal" income gives an instalment that is too high.</p></div>
+    <div><b>2. Consequences are visible before commitment</b><p>The manual route cannot show what a missed payment triggers. Only an agent call or the chat could, and the chat does not today (T-208).</p></div>
+    <div><b>3. Context travels with the consumer</b><p>The manual route ends in a call where the agent starts blank (N-08). The handoff means the call confirms a plan instead of rebuilding it.</p></div>
+  </div>
+</section>
+
+<footer>
+  <p>Fictional sample data, illustrative, not Riverty research. All people, numbers and events are fictional.</p>
+  <p>Only the agent call is documented in the interviews; the manual steps and the expected benefits are hypotheses to validate. Judge the future state by missed payments within 60 days, not by an SSR that counts plans at creation.</p>
+</footer>
+
+</main>
+</body>
+</html>
