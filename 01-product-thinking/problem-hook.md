@@ -1,53 +1,17 @@
-# Problem Hook & Value Proposition: [StreamLine / RouteLogic / your initiative]
+# Problem Hook & Value Proposition (Module 1)
 
-> **Module 1 · ★ Deliverable 1.** Repo file `01-product-thinking/problem-hook.md` — part of your submission.
-> Do the lab in the **Module 1 · Exercise 2 Guide** (linked from the Module 1 deck), then click **⬇ Download .md** — it saves as this exact file. Commit it here.
-> It becomes the **Problem, Value & Hypothesis** slide of your Module 6 final deck. (Your Module 1 · Exercise 1 discovery map lands in `strategic-map.md`.)
+## Responses
+- **Chosen path, which Riverty business-unit case are you using?:** BU Collection
+- **Strategic crisis, based on the brief, if the company does nothing for 12 months, what happens to its market position?:** Operational cost may be higher and collection results lower than the ones of competitors who manage to resolve payment journeys with high self-service rates and lower drop-offs
+- **Moment of misery, what is the user likely doing outside the product (Google, spreadsheets, a competitor) because your tool isn’t serving them?:** They call an agent, they google what they have to do, they ask AI their questions, they complain about the experience both verbally and written (forums etc.), they read letters
+- **Problem hook, summarize the business risk and user pain into one urgent sentence.:** High agent workload and drop-offs persist because consumers can’t tell what is affordable or what happens if they miss a payment, so they don’t trust the digital instalment journey enough to commit, and with Europe-wide rollout and an SSR that counts plans at creation, the problem will scale unnoticed.
+- **Value proposition, based on the initiative in your assigned Riverty case, what is the new value and why is it urgent to launch now?:** For German consumers, who cannot pay a claim in one go, we will make agreeing a sustainable instalment plan possible without a call, because this is where self-service breaks down today and the European rollout is about to copy whatever we launch first.
 
-## 1. Chosen scenario
+## Cold-read your own hook
+- **Is the business risk high enough to justify a new initiative, a high-stakes threat, or a minor inconvenience?:** High enough to justify action, but only if framed correctly. The risk is not just higher agent cost. It is that SSR can rise while missed plans, agent rework and weaker recovery go unseen, and that this gets replicated across markets and portfolios. 
+Data to strengthenthe case: instalment drop-off rate, share of instalment cases reaching agents, and missed-plan rate.
+- **Is the moment of misery a systemic problem or just an edge case?:** It's likely systemic. Consumers who cannot pay in one go all hit the same uncertainty, and the fallback behaviors (calling, googling, asking AI, reading letters) would apply to all journeys not answering their questions. But to confirm it is not an edge case, I would need to check what share of cases need an instalment option and where in the journey they leave.
+- **Does the value proposition actually remove the obstacle you identified, or is it a generic feature?:** It's still a bit generic. The hook says the obstacle is uncertainty and lack of trust. But the value proposition promises “possible without a call”, which is a process outcome. Making it possible does not make people confident enough to commit. It also says nothing about explaining affordability, what happens after a missed payment, handling multiple claims, or the agent handoff, which would make it specific and not just “a self-service instalment feature”. 
 
-**Path:** _StreamLine Spotlight (B2C) · RouteLogic Velocity (B2B) · my own initiative_
-
-_One line on why you picked it._
-
-## 2. The strategic crisis
-
-_The big-picture business risk. If the company does nothing for 12 months, what happens to its market position?_
-
-> If we do nothing for 12 months, the company will…
-
-## 3. The moment of misery
-
-_The specific point where the product fails the user, forcing a manual workaround (Google, spreadsheets, group texts, a competitor)._
-
-> The user is currently forced to…
-
-## 4. Problem hook
-
-_One urgent sentence fusing the business risk and the user pain, your pitch for why this is the most important thing to work on right now._
-
-> We must solve [business risk] by addressing [user pain]…
-
-## 5. Value proposition
-
-_Who it's for, the new value, and why it's urgent to launch now._
-
-> For **[who]**, we will **[value]** because **[urgent why]**.
-
-## 6. Cold-read self-review
-
-_Read your hook back as a skeptical stakeholder. If you don't feel the urgency, that's your data._
-
-| Question | Your answer |
-|---|---|
-| Is the business risk high-stakes enough to justify a new initiative? | _____ |
-| Is the moment of misery systemic, or just an edge case? | _____ |
-| Does the value proposition actually remove the obstacle? | _____ |
-
-## 7. Finalized hypothesis _(complete in Module 3)_
-
-> Based on [qual + quant evidence], I believe that [solving X] for [persona] will result in [outcome], as measured by a [X%] change in [success metric]. I will protect [guardrail metric] and make a go/no-go decision after [decision window].
-
-## Link to full artifact
-
-_[link to your Problem Hook Builder export]_
+Possible improvement: 
+For German consumers, who cannot pay their claims in one go, we will help them commit to an instalment plan they understand and can keep, by explaining what is affordable and why we ask, showing what happens if a payment is missed, handling multiple claims in one plan, and offering a clear handoff to an agent with the context, because this is where self-service breaks down today and the European rollout will copy whatever we launch first.
