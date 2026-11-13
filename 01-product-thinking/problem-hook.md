@@ -2,16 +2,32 @@
 
 ## Responses
 - **Chosen path, which Riverty business-unit case are you using?:** BU Collection
-- **Strategic crisis, based on the brief, if the company does nothing for 12 months, what happens to its market position?:** Operational cost may be higher and collection results lower than the ones of competitors who manage to resolve payment journeys with high self-service rates and lower drop-offs
-- **Moment of misery, what is the user likely doing outside the product (Google, spreadsheets, a competitor) because your tool isn’t serving them?:** They call an agent, they google what they have to do, they ask AI their questions, they complain about the experience both verbally and written (forums etc.), they read letters
-- **Problem hook, summarize the business risk and user pain into one urgent sentence.:** High agent workload and drop-offs persist because consumers can’t tell what is affordable or what happens if they miss a payment, so they don’t trust the digital instalment journey enough to commit, and with Europe-wide rollout and an SSR that counts plans at creation, the problem will scale unnoticed.
-- **Value proposition, based on the initiative in your assigned Riverty case, what is the new value and why is it urgent to launch now?:** For German consumers, who cannot pay a claim in one go, we will make agreeing a sustainable instalment plan possible without a call, because this is where self-service breaks down today and the European rollout is about to copy whatever we launch first.
+- **Strategic crisis, based on the brief, if the company does nothing for 12 months, what happens to its market position?:** International Collection stays a manually cleared, partly hand-built offer. Competitors such as Intrum already sell one integration, central governance and reporting, so Riverty would likely lose new enterprise deals like Europcar’s and put existing multinationals like Sixt at risk.
+- **Moment of misery, what is the user likely doing outside the product (Google, spreadsheets, a competitor) because your tool isn’t serving them?:** Ops Finance: they clear international payments by hand, convert currencies, and invoice clients and partners manually. 
+Global CSM and IT operations: they chase agencies for missing files and reports. Today’s monitoring is emailed Excel reports with manual follow-up, so they check inboxes and SFTP folders instead of a dashboard.
+Clients’ finance teams: PayPal started its own project to reconcile account-based bookings against cash transfers, which means they are building the missing piece themselves. IONOS complained about late or non-matching clearings, so they likely reconcile it in their own sheets. They also created their own reporting system and ask us for additional integration to generate the operational view they need.
+Large clients like Sixt: they would rather not sign more local agreements, so they negotiate with partners directly, outside Riverty's product.
+Prospects: buyers like Europcar can compare one-integration, one-governance offers from competitors such as Intrum and turn to them.
+- **Problem hook, summarize the business risk and user pain into one urgent sentence.:** Multinationals with central receivables management, active in 5 to 15 European markets, want to run international collection as one operation, but today their legal teams sign partner agreements market by market and their finance teams reconcile payment exports against clearing reports by hand. Until IC Core offers one Master Servicer contract with automated clearing that Ops Finance can run without manual work, these clients hold back volume, new deals slip, and a rival with one contract, one integration and one report can win them.
+- **Value proposition, based on the initiative in your assigned Riverty case, what is the new value and why is it urgent to launch now?:** Value proposition
+
+For multinationals with central receivables management in multiple European markets, International Collection replaces market-by-market agreements, fragmented portfolio views and manual reconciliation with a standardised European receivables backbone:
+
+One contract with the Master Servicer.
+One integration.
+One consolidated report: payment exports that match clearing data, plus operational insights. Same KPIs and reporting across all markets.
+One accountable partner that makes sure all agencies perform as expected.
+
+New value for clients: their legal teams sign once instead of agency by agency, their finance teams stop reconciling by hand, and one partner answers for agency performance.
+
+Why launch now
+
+Sixt refuses more local agreements, which blocks moving its NL volume from a partner to our own agency.
+Europcar’s tender is delayed because no Premium Tier product exists yet.
+Strauss asks for European-scale coverage. It can start without the one-contract setup, but that setup would make selling and running it much easier. It only scales once billing is fully integrated, and manual central clearing cannot scale.
+Local collection laws stopped foreign collection into NL and BE, CA, UK, IL. The legacy Cross-Border Centre therefore cannot carry future deals with substantial cross-border volume, which is what Premium Tier is for.
 
 ## Cold-read your own hook
-- **Is the business risk high enough to justify a new initiative, a high-stakes threat, or a minor inconvenience?:** High enough to justify action, but only if framed correctly. The risk is not just higher agent cost. It is that SSR can rise while missed plans, agent rework and weaker recovery go unseen, and that this gets replicated across markets and portfolios. 
-Data to strengthenthe case: instalment drop-off rate, share of instalment cases reaching agents, and missed-plan rate.
-- **Is the moment of misery a systemic problem or just an edge case?:** It's likely systemic. Consumers who cannot pay in one go all hit the same uncertainty, and the fallback behaviors (calling, googling, asking AI, reading letters) would apply to all journeys not answering their questions. But to confirm it is not an edge case, I would need to check what share of cases need an instalment option and where in the journey they leave.
-- **Does the value proposition actually remove the obstacle you identified, or is it a generic feature?:** It's still a bit generic. The hook says the obstacle is uncertainty and lack of trust. But the value proposition promises “possible without a call”, which is a process outcome. Making it possible does not make people confident enough to commit. It also says nothing about explaining affordability, what happens after a missed payment, handling multiple claims, or the agent handoff, which would make it specific and not just “a self-service instalment feature”. 
-
-Possible improvement: 
-For German consumers, who cannot pay their claims in one go, we will help them commit to an instalment plan they understand and can keep, by explaining what is affordable and why we ask, showing what happens if a payment is missed, handling multiple claims in one plan, and offering a clear handoff to an agent with the context, because this is where self-service breaks down today and the European rollout will copy whatever we launch first.
+- **Is the business risk high enough to justify a new initiative, a high-stakes threat, or a minor inconvenience?:** _(not filled in)_
+- **Is the moment of misery a systemic problem or just an edge case?:** _(not filled in)_
+- **Does the value proposition actually remove the obstacle you identified, or is it a generic feature?:** _(not filled in)_
