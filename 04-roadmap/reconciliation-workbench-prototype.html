@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reconciliation &amp; Exception Workbench – prototype v0.1</title>
+<style>
+:root{
+  --side:#0e3b2e; --side-2:#16503f; --ink:#14201b; --muted:#5d6b64; --line:#dfe6e2; --bg:#f4f7f5; --card:#fff;
+  --green:#1f8a5b; --green-bg:#e6f4ed; --amber:#b7791f; --amber-bg:#fdf1dc; --red:#c0392b; --red-bg:#fbe9e6;
+  --blue:#2b5fb3; --blue-bg:#e8f0fb; --purple:#6b46c1; --purple-bg:#efe9fb; --sel:#e9f5ef;
+}
+*{box-sizing:border-box}
+body{margin:0;font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg);display:flex;min-height:100vh}
+button,select,input{font:inherit;color:inherit}
+nav{width:210px;background:var(--side);color:#cfe3da;padding:20px 12px;flex:none}
+nav .logo{font-size:22px;font-weight:700;color:#fff;padding:0 10px}
+nav .sub{font-size:12px;padding:0 10px 18px;opacity:.8}
+nav a{display:flex;justify-content:space-between;align-items:center;padding:9px 10px;border-radius:8px;color:inherit;text-decoration:none;margin-bottom:2px}
+nav a.on{background:var(--side-2);color:#fff;font-weight:600}
+nav .pill{background:#f5b84a;color:#3b2a00;border-radius:10px;font-size:11px;font-weight:700;padding:0 7px}
+main{flex:1;padding:18px 24px 40px;min-width:0}
+.crumbs{font-size:12px;color:var(--muted)}
+h1{margin:4px 0 2px;font-size:26px}
+.lead{color:var(--muted);margin:0 0 14px}
+.filters{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.filters label{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 10px;display:flex;gap:8px;align-items:center;color:var(--muted)}
+.filters select{border:0;background:transparent;flex:1;font-weight:600;color:var(--ink)}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.ctl{border:1px solid var(--line);border-radius:10px;padding:12px 14px;text-align:left;background:var(--card);cursor:pointer}
+.ctl:hover{box-shadow:0 1px 6px rgba(0,0,0,.08)}
+.ctl.active{outline:2px solid var(--side)}
+.ctl .t{font-size:12px;color:var(--muted)}
+.ctl .s{font-size:20px;font-weight:700;margin:2px 0}
+.ctl .d{font-size:12px;color:var(--muted)}
+.ctl.attention{background:var(--amber-bg)} .ctl.attention .s{color:var(--amber)}
+.ctl.matched{background:var(--green-bg)} .ctl.matched .s{color:var(--green)}
+.ctl.pending{background:var(--blue-bg)} .ctl.pending .s{color:var(--blue)}
+.grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.card h2{margin:0 0 8px;font-size:16px}
+.tabs{display:flex;gap:18px;align-items:center;border-bottom:1px solid var(--line);margin-bottom:8px}
+.tab{background:none;border:0;padding:8px 0;cursor:pointer;color:var(--muted)}
+.tab.on{color:var(--green);font-weight:600;border-bottom:2px solid var(--green)}
+.tabs input{margin-left:auto;margin-bottom:4px;border:1px solid var(--line);border-radius:8px;padding:5px 9px;width:200px}
+table{width:100%;border-collapse:collapse}
+th{font-size:12px;color:var(--muted);text-align:left;font-weight:500;padding:6px 6px}
+td{padding:8px 6px;border-top:1px solid var(--line);vertical-align:middle}
+tr.row{cursor:pointer} tr.row:hover td{background:#f8faf9} tr.row.sel td{background:var(--sel)}
+td small{display:block;color:var(--muted);font-size:12px}
+.src{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;background:var(--green-bg);color:var(--green)}
+.badge{font-size:12px;font-weight:600;padding:2px 9px;border-radius:6px;white-space:nowrap}
+.b-Review{background:var(--amber-bg);color:var(--amber)} .b-Investigate{background:var(--purple-bg);color:var(--purple)}
+.b-Correct{background:var(--green-bg);color:var(--green)} .b-Done{background:#eceff0;color:#555}
+.pos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.posbox{border-radius:10px;padding:10px 14px}
+.posbox.a{background:var(--amber-bg)} .posbox.c{background:var(--blue-bg)} .posbox.z{background:var(--green-bg)}
+.posbox .n{font-size:20px;font-weight:700}
+.posbox .d{font-size:12px;color:var(--muted)}
+.dhead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.dhead h2{font-size:18px;margin:0}
+.meta{font-size:12px;color:var(--muted)}
+.kv{display:grid;grid-template-columns:1fr 1.4fr;gap:12px;margin:12px 0}
+.kv dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:13px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;font-weight:500}
+.calc{display:grid;gap:5px;font-size:13px}
+.calc div{display:flex;justify-content:space-between;padding:6px 10px;background:#f4f7f5;border-radius:6px}
+.calc .var{background:var(--red-bg);color:var(--red);font-weight:700;font-size:15px}
+.calc .var.ok{background:var(--green-bg);color:var(--green)}
+.note{border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px;background:#fbfcfb;margin:10px 0}
+.note.warn{background:var(--amber-bg);border-color:#f0d9a8}
+.sect{margin:14px 0 6px;font-weight:600}
+.mini{width:100%;font-size:13px} .mini th,.mini td{padding:5px 6px} .mini td.r,.mini th.r{text-align:right}
+.cand{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-bottom:6px;cursor:pointer}
+.cand.on{border-color:var(--green);background:var(--green-bg)}
+.cand ul{margin:4px 0 0;padding:0;list-style:none;font-size:12px;color:var(--muted)}
+.ok-t{color:var(--green)} .no-t{color:var(--red)}
+.steps{display:flex;margin:10px 0}
+.step{flex:1;text-align:center;position:relative;font-size:12px;color:var(--muted)}
+.step:not(:last-child)::after{content:"";position:absolute;top:11px;left:calc(50% + 14px);right:calc(-50% + 14px);height:2px;background:var(--line)}
+.step.done:not(:last-child)::after{background:var(--green)}
+.dot{width:22px;height:22px;border-radius:50%;border:2px solid #b8c3bd;background:#fff;margin:0 auto 4px;display:grid;place-items:center;font-size:12px;position:relative;z-index:1}
+.step.done .dot{background:var(--green);border-color:var(--green);color:#fff}
+.step.cur .dot{border-color:var(--green);box-shadow:inset 0 0 0 4px #fff,inset 0 0 0 12px var(--green)}
+.step.cur b,.step.done b{color:var(--ink)}
+.actionbar{border:1px dashed #9db8aa;border-radius:8px;padding:10px 12px;background:#f7fbf9}
+.actionbar p{margin:0 0 8px;font-size:13px}
+.chk{display:flex;gap:8px;align-items:flex-start;font-size:13px;margin:6px 0}
+.btn{background:var(--green);color:#fff;border:0;border-radius:8px;padding:8px 14px;font-weight:600;cursor:pointer}
+.btn:disabled{background:#b9c4be;cursor:not-allowed}
+.btn.sec{background:#fff;color:var(--ink);border:1px solid var(--line)}
+select.cause{padding:6px;border:1px solid var(--line);border-radius:6px;width:100%}
+.audit{list-style:none;margin:0;padding:0;font-size:12px;color:var(--muted)}
+.audit li{padding:4px 0;border-top:1px solid var(--line)} .audit b{color:var(--ink);font-weight:600}
+.chain{display:flex;gap:8px;align-items:stretch;overflow-x:auto}
+.node{flex:1;min-width:150px;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px}
+.node b{display:block;font-size:13px}
+.node.ok{background:var(--green-bg);border-color:#bfe2d0} .node.warn{background:var(--amber-bg);border-color:#f0d9a8} .node.pend{background:#f4f6f5}
+.arrow{align-self:center;color:var(--muted)}
+.empty{padding:20px;text-align:center;color:var(--muted)}
+.foot{font-size:12px;color:var(--muted);margin-top:6px}
+@media(max-width:1100px){.grid{grid-template-columns:1fr}.cards,.filters{grid-template-columns:1fr 1fr}nav{display:none}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">Riverty</div><div class="sub">International<br>Collection Platform</div>
+  <a href="#">Overview</a><a href="#">Portfolio</a><a href="#">Claims</a><a href="#">Payments</a>
+  <a href="#" class="on">Clearing &amp; Reconciliation</a>
+  <a href="#">Exceptions <span class="pill" id="navCount">3</span></a>
+  <a href="#">Agencies</a><a href="#">Reporting</a><a href="#">Settings</a>
+</nav>
+<main>
+  <div class="crumbs">International Collection › Clearing &amp; Reconciliation › Exception Workbench</div>
+  <h1>Reconciliation &amp; Exception Workbench</h1>
+  <p class="lead">Reconcile agency activity, client exports, invoices and settlements, and resolve exceptions with a traceable adjustment process.</p>
+  <div class="filters">
+    <label>Agency <select><option>TruAcord US</option></select></label>
+    <label>Client <select><option>1&amp;1</option></select></label>
+    <label>Period <select><option>June 2026</option></select></label>
+    <label>Currency <select><option>USD</option></select></label>
+  </div>
+  <div class="cards" id="cards"></div>
+  <div class="grid">
+    <div>
+      <div class="card">
+        <h2 id="listTitle">Exceptions</h2>
+        <div class="tabs" id="tabs"></div>
+        <table><thead><tr><th>Source</th><th>Exception</th><th>Impact</th><th>Amount</th><th>Status</th></tr></thead><tbody id="rows"></tbody></table>
+        <div class="foot" id="listFoot"></div>
+      </div>
+      <div class="card">
+        <h2>Open positions (Master Servicer)</h2>
+        <div class="pos" id="pos"></div>
+      </div>
+    </div>
+    <div class="card" id="detail"></div>
+  </div>
+  <div class="card"><h2 id="chainTitle">Linked records</h2><div class="chain" id="chain"></div></div>
+  <div class="foot">Prototype v0.1 · illustrative data only, not validated accounting · no historical record is ever overwritten; every action appends to the audit trail.</div>
+</main>
+
+<script>
+"use strict";
+const usd = n => (n<0?"−":"")+"USD "+Math.abs(n).toFixed(2);
+const STAGES = ["Detected","Investigating","Approved adjustment","Next period clearing","Verified & closed"];
+
+// ---- Seed data: the four exceptions from the revised mockup, modelled on test catalogue EX-011, EX-003, EX-016/007, EX-015 ----
+const EX = [
+ { id:"EXC-2026-0065", src:"PAYM", domain:"export", type:"alloc", badge:"Review", ref:"EX-011",
+   title:"PRC allocation exceeds balance", sub:"Payment USD 120.00 to PRC, balance USD 100.00",
+   impact:"Client export blocked", amount:20, source:"PAYM", payment:"PAY-998103", line:"n/a (pre-clearing)", claim:"CLM-554310",
+   calc:[["Reported to PRC",120],["Outstanding PRC",100],["Overflow",20,"var"]],
+   guard:"Do not auto-redistribute. The arithmetic fit is not approval; the allocation must follow the agreed business rule.",
+   stageSub:["Jun 30","","","Corrected export sent","Client ack'd"],
+   actions:["Start investigation","Approve allocation (Ops Finance)","Send corrected export","Verify & close"],
+   evidence:"Client billing acknowledged the corrected export",
+   chain:[["Agency source transaction","PAY-998103 · USD 120.00","ok"],["Export record","Blocked – allocation invalid","warn"],["Clearing line","Not yet cleared","pend"],["Invoice (commission)","N/A","pend"],["Cash settlement","N/A","pend"]],
+   closeChain:{1:["ok","Corrected export acknowledged"]} },
+ { id:"EXC-2026-0066", src:"BILL", domain:"clearing", type:"idmatch", badge:"Investigate", ref:"EX-003",
+   title:"DCA activity ID not found", sub:"Clearing line CL-44782 cannot be matched",
+   impact:"Clearing unmatched", amount:0, source:"BILL", payment:"unknown", line:"CL-44782", claim:"CLM-554377",
+   calc:[["Unmatched clearing line",45],["Matched payments",0],["Financial variance (identification only)",0,"var ok"]],
+   guard:"Do not edit the original payment ID. Approve a reference association between the clearing line and the original movement.",
+   stageSub:["Jun 30","","","Clearing re-matched","Verified"],
+   actions:["Start investigation","Approve reference association","Re-match clearing line","Verify & close"],
+   evidence:"Clearing line shows as matched; no financial adjustment was needed",
+   chain:[["Agency source transaction","Not found by ID","warn"],["Export record","Not found by ID","warn"],["Clearing line","CL-44782 · USD 45.00","warn"],["Invoice (commission)","Not affected yet","pend"],["Cash settlement","N/A","pend"]],
+   closeChain:{0:["ok","Linked via approved reference"],1:["ok","Linked via approved reference"],2:["ok","CL-44782 matched · USD 45.00"]} },
+ { id:"EXC-2026-0067", src:"BILL", domain:"invoice", type:"commission", badge:"Review", ref:"EX-016 / EX-007",
+   title:"Commission −8.37 vs −16.74", sub:"Payment ID PAY-998271 · Clearing line CL-44795",
+   impact:"Invoice discrepancy", amount:8.37, source:"BILL", payment:"PAY-998271", line:"CL-44795", claim:"CLM-554882",
+   calc:[["Agency declared (invoice)",-16.74],["Platform calculated (10% × 83.70)",-8.37],["Variance",-8.37,"var"]],
+   guard:"Do not change historical clearing. Investigate the commission base, approve an adjustment, link it to a future statement.",
+   stageSub:["Jun 30","","","Jul 2026 clearing","Invoice + cash evidence"],
+   actions:["Start investigation","Approve adjustment (Ops Finance)","Link to Jul 2026 clearing","Verify & close"],
+   evidence:"Corrective invoice received AND July settlement shows the +8.37 adjustment",
+   chain:[["Agency source transaction","PAY-998271 · USD 83.70","ok"],["Export record","EXP-730041 · USD 83.70","ok"],["Clearing line","CL-44795 · USD 83.70","ok"],["Invoice (commission)","INV-118443 · USD 16.74","warn"],["Cash settlement","N/A · Pending","pend"]],
+   closeChain:{3:["ok","Corrective invoice received"],4:["ok","Adjustment +8.37 in Jul settlement"]} },
+ { id:"EXC-2026-0068", src:"Export", domain:"export", type:"cancel", badge:"Correct", ref:"EX-015",
+   title:"Missing cancellation", sub:"Cancellation for PAY-997880 not exported",
+   impact:"Client ledger difference", amount:50, source:"Export", payment:"PAY-997880", line:"CL-44710", claim:"CLM-553120",
+   calc:[["Agency movements (net)",0],["Client export (net)",50],["Client-side difference",50,"var"]],
+   guard:"Keep the original export. Send a signed correction that carries the original accounting reference.",
+   stageSub:["Jun 30","","","Correction transmitted (Jul)","Client ack'd"],
+   actions:["Start investigation","Approve correction export","Transmit correction (next open period)","Verify & close"],
+   evidence:"Client billing acknowledged the correction and the open balance is explained",
+   chain:[["Agency source transaction","PAY-997880 + cancellation","ok"],["Export record","Cancellation missing","warn"],["Clearing line","CL-44710 · matched","ok"],["Invoice (commission)","Not affected","ok"],["Cash settlement","Client side pending","pend"]],
+   closeChain:{1:["ok","Correction COR-2026-0412 sent"],4:["ok","Client side settled"]} },
+];
+EX.forEach(e=>{ Object.assign(e,{stage:0,cause:"",cand:"",ruleOk:false,evOk:false,
+  log:[{t:"Jun 30",who:"System",txt:"Exception detected ("+e.src+" file, period June 2026)"}]}); });
+
+const CONTROLS = [
+ {key:"export",   title:"Source vs client export", ok:"All exports reconciled", word:"export"},
+ {key:"clearing", title:"Agency clearing",         ok:"All clearing lines reconciled", word:"clearing"},
+ {key:"invoice",  title:"Commission & cost invoices", ok:"All invoices match", word:"invoice"},
+ {key:"cash",     title:"Cash & MS position",      ok:"Cash matched to settlement", word:"cash"},
+];
+let S = {sel:"EXC-2026-0067", tab:"open", q:"", dom:null, closedBefore:18};
+
+const $ = id => document.getElementById(id);
+const cur = () => EX.find(e=>e.id===S.sel);
+const isOpen = e => e.stage<4;
+const tabOf = e => e.stage===0?"open":e.stage<4?"prog":"done";
+
+function readiness(e){
+  if(e.stage===0) return {ok:true};
+  if(e.stage===1){
+    if(e.type==="commission") return e.cause?{ok:true}:{ok:false,why:"Select the root cause first."};
+    if(e.type==="idmatch")   return e.cand?{ok:true}:{ok:false,why:"Select the matching candidate first."};
+    return e.ruleOk?{ok:true}:{ok:false,why:"Confirm the business rule / evidence first."};
+  }
+  if(e.stage===2) return {ok:true};
+  if(e.stage===3) return e.evOk?{ok:true}:{ok:false,why:"Closure needs verifiable evidence."};
+  return {ok:true};
+}
+function advance(e){
+  const r=readiness(e); if(!r.ok||e.stage>=4) return;
+  const a=e.actions[e.stage]; let detail="";
+  if(e.stage===1){
+    if(e.type==="commission") detail=" – cause: "+e.cause;
+    if(e.type==="idmatch") detail=" – mapped to "+e.cand+" (original payment ID unchanged)";
+  }
+  if(e.stage===3) detail=" – evidence: "+e.evidence;
+  e.log.push({t:new Date().toTimeString().slice(0,5),who:"You (demo)",txt:a+detail});
+  e.stage++;
+  if(e.stage===4){ e.badge="Done"; }
+  else if(e.stage>0 && e.badge==="Review"){ /* keep */ }
+}
+
+// ---- render ----
+function render(){
+  renderCards(); renderList(); renderPos(); renderDetail(); renderChain();
+  $("navCount").textContent = EX.filter(isOpen).length;
+}
+function renderCards(){
+  $("cards").innerHTML = CONTROLS.map(c=>{
+    let cls,status,desc;
+    if(c.key==="cash"){
+      const n=EX.filter(isOpen).length;
+      cls=n?"pending":"matched"; status=n?"Pending":"Matched"; desc=n?"Awaiting cash settlement · "+n+" open item"+(n>1?"s":""):c.ok;
+    } else {
+      const n=EX.filter(e=>e.domain===c.key&&isOpen(e)).length;
+      const amt=EX.filter(e=>e.domain===c.key&&isOpen(e)).reduce((s,e)=>s+e.amount,0);
+      cls=n?"attention":"matched"; status=n?"Attention":"Matched";
+      desc=n?n+" exception"+(n>1?"s":"")+(amt?" · "+usd(amt):""):c.ok;
+    }
+    return `<button class="ctl ${cls} ${S.dom===c.key?"active":""}" data-dom="${c.key}"><div class="t">${c.title}</div><div class="s">${status}</div><div class="d">${desc}</div></button>`;
+  }).join("");
+}
+function renderList(){
+  const n=t=>EX.filter(e=>tabOf(e)===t).length;
+  $("listTitle").textContent="Exceptions ("+EX.length+")";
+  $("tabs").innerHTML =
+    `<button class="tab ${S.tab==="open"?"on":""}" data-tab="open">Open (${n("open")})</button>`+
+    `<button class="tab ${S.tab==="prog"?"on":""}" data-tab="prog">In progress (${n("prog")})</button>`+
+    `<button class="tab ${S.tab==="done"?"on":""}" data-tab="done">Resolved (${S.closedBefore+n("done")})</button>`+
+    `<input id="q" placeholder="Search ID, payment ID, claim…" value="${S.q}">`;
+  const q=S.q.toLowerCase();
+  const rows=EX.filter(e=>tabOf(e)===S.tab && (!S.dom||e.domain===S.dom) &&
+    (!q||[e.id,e.payment,e.claim,e.title,e.line].join(" ").toLowerCase().includes(q)));
+  $("rows").innerHTML = rows.length? rows.map(e=>`
+    <tr class="row ${e.id===S.sel?"sel":""}" data-id="${e.id}">
+      <td><span class="src">${e.src}</span></td>
+      <td><b>${e.title}</b><small>${e.sub}</small></td>
+      <td>${e.impact}</td><td>${usd(e.amount)}</td>
+      <td><span class="badge b-${e.badge}">${e.badge==="Done"?"Closed":e.badge}</span></td>
+    </tr>`).join("") : `<tr><td colspan="5" class="empty">No exceptions here.</td></tr>`;
+  $("listFoot").textContent = S.dom? "Filtered by control: "+CONTROLS.find(c=>c.key===S.dom).title+" (click the card again to clear)" : "";
+  const qi=$("q"); if(S.focusQ){qi.focus();qi.setSelectionRange(qi.value.length,qi.value.length);}
+}
+function renderPos(){
+  const ag=EX.filter(e=>e.domain==="invoice"&&isOpen(e)).reduce((s,e)=>s+e.amount,0);
+  const cl=EX.filter(e=>e.type==="cancel"&&isOpen(e)).reduce((s,e)=>s+e.amount,0);
+  $("pos").innerHTML=
+   `<div class="posbox ${ag?"a":"z"}"><b>Agency balance</b><div class="n">${usd(ag)}</div><div class="d">Amount owed by agency (commission difference)</div></div>`+
+   `<div class="posbox ${cl?"c":"z"}"><b>Client-side balance</b><div class="n">${usd(cl)}</div><div class="d">Client ledger difference (missing cancellation in export)</div></div>`;
+}
+function calcHTML(e){
+  return `<div class="calc">`+e.calc.map(([l,v,c])=>`<div class="${c||""}"><span>${l}</span><span>${usd(v)}</span></div>`).join("")+`</div>`;
+}
+function investigation(e){
+  if(e.stage>=4) return `<div class="note">Closed with evidence: ${e.evidence}.</div>`;
+  if(e.type==="alloc"){
+    return `<div class="sect">Proposed allocation</div>
+    <table class="mini"><tr><th>Bucket</th><th class="r">Outstanding</th><th class="r">Agency reported</th><th class="r">Proposed</th></tr>
+    <tr><td>Principal (PRC)</td><td class="r">100.00</td><td class="r">120.00</td><td class="r"><b>100.00</b></td></tr>
+    <tr><td>Collection costs (CLC)</td><td class="r">20.00</td><td class="r">0.00</td><td class="r"><b>20.00</b></td></tr>
+    <tr><td>Interest (INT)</td><td class="r">5.00</td><td class="r">0.00</td><td class="r">0.00</td></tr></table>
+    <div class="note warn">Impact: client entitlement and commission base may change (CLC eligibility depends on contract).</div>
+    ${e.stage===1?`<label class="chk"><input type="checkbox" data-chk="ruleOk" ${e.ruleOk?"checked":""}> Allocation follows the agreed bucket-priority rule for this client</label>`:""}`;
+  }
+  if(e.type==="idmatch"){
+    const C=[{id:"PAY-998312",ev:[[1,"Amount USD 45.00 = clearing line"],[1,"Currency USD"],[1,"Claim CLM-554377 matches"],[1,"Booked May 29, within period"]]},
+             {id:"PAY-998313",ev:[[1,"Amount USD 45.00 = clearing line"],[1,"Currency USD"],[0,"Claim differs (CLM-554390)"],[1,"Booked May 29, within period"]]}];
+    return `<div class="sect">Candidate original movements</div>`+C.map(c=>`
+      <div class="cand ${e.cand===c.id?"on":""}" ${e.stage===1?`data-cand="${c.id}"`:""}>
+        <input type="radio" ${e.cand===c.id?"checked":""} ${e.stage===1?"":"disabled"}>
+        <div><b>${c.id}</b><ul>${c.ev.map(([o,t])=>`<li class="${o?"ok-t":"no-t"}">${o?"✓":"✗"} ${t}</li>`).join("")}</ul></div></div>`).join("")+
+      `<div class="note">Same amount alone never proves a match. Two candidates exist; claim lineage favours PAY-998312. A human approves the mapping.</div>`;
+  }
+  if(e.type==="commission"){
+    return `<div class="sect">Root cause <span class="meta">(required before an adjustment can be approved)</span></div>
+    <select class="cause" data-cause ${e.stage>1?"disabled":""}>
+      <option value="">Select cause…</option>
+      ${["Missing payment import","Incorrect transaction aggregation","Duplicate movement","Incorrect commission base","Incorrect commission calculation"].map(o=>`<option ${e.cause===o?"selected":""}>${o}</option>`).join("")}
+    </select>
+    <div class="note warn">Hint (not a decision): agency 16.74 = 10% × 167.40 = 2 × base 83.70 → check for a duplicated movement or doubled base. Platform calculation can also be wrong.</div>`;
+  }
+  if(e.type==="cancel"){
+    return `<div class="sect">Proposed correction export</div>
+    <table class="mini">
+     <tr><td>Correction type</td><td class="r"><b>Cancellation (signed)</b></td></tr>
+     <tr><td>Signed amount</td><td class="r"><b>−USD 50.00</b></td></tr>
+     <tr><td>Original accounting ref</td><td class="r">EXP-729880</td></tr>
+     <tr><td>Correction ref</td><td class="r">COR-2026-0412</td></tr>
+     <tr><td>Effective period</td><td class="r">June 2026</td></tr>
+     <tr><td>Transmitted in</td><td class="r">July 2026 (next open period)</td></tr></table>
+    ${e.stage===1?`<label class="chk"><input type="checkbox" data-chk="ruleOk" ${e.ruleOk?"checked":""}> Agency-side amount is correct; only the client export is wrong</label>`:""}`;
+  }
+  return "";
+}
+function renderDetail(){
+  const e=cur();
+  const r=readiness(e);
+  const ev = e.stage===3 ? `<label class="chk"><input type="checkbox" data-chk="evOk" ${e.evOk?"checked":""}> ${e.evidence}</label>` : "";
+  const bar = e.stage>=4
+   ? `<div class="actionbar"><p><b>Closed.</b> All required effects verified.</p></div>`
+   : `<div class="actionbar"><p><b>Next step:</b> ${e.actions[e.stage]}${r.ok?"":` <span class="meta">— ${r.why}</span>`}</p>${ev}
+      <button class="btn" data-adv ${r.ok?"":"disabled"}>${e.actions[e.stage]}</button></div>`;
+  $("detail").innerHTML = `
+    <div class="dhead"><div><h2>${e.title}</h2><div class="meta">${e.id} · Source: ${e.source} · ${e.ref} (test catalogue)</div></div>
+      <span class="badge b-${e.badge}">${e.badge==="Done"?"Closed":e.badge}</span></div>
+    <div class="kv"><dl><dt>Payment ID</dt><dd>${e.payment}</dd><dt>Clearing line</dt><dd>${e.line}</dd><dt>Claim ID</dt><dd>${e.claim}</dd><dt>Period</dt><dd>June 2026</dd></dl>
+      ${calcHTML(e)}</div>
+    <div class="note"><b>Rule:</b> ${e.guard}</div>
+    ${investigation(e)}
+    <div class="sect">Resolution workflow</div>
+    <div class="steps">${STAGES.map((s,i)=>`<div class="step ${i<e.stage?"done":i===e.stage?"cur":""}"><div class="dot">${i<e.stage?"✓":""}</div><b>${s}</b><div>${i===e.stage&&i<4?"(current)":(e.stageSub[i]||"")}</div></div>`).join("")}</div>
+    ${bar}
+    <div class="sect">Audit trail</div>
+    <ul class="audit">${[...e.log].reverse().map(l=>`<li><b>${l.t}</b> · ${l.who} · ${l.txt}</li>`).join("")}</ul>`;
+}
+function renderChain(){
+  const e=cur(); $("chainTitle").textContent="Linked records ("+e.payment+")";
+  $("chain").innerHTML = e.chain.map(([t,d,st],i)=>{
+    let dd=d; if(e.stage===4 && e.closeChain[i]) [st,dd]=e.closeChain[i];
+    return (i?`<div class="arrow">→</div>`:"")+`<div class="node ${st}"><b>${t} ${st==="ok"?"✓":st==="warn"?"⚠":"○"}</b>${dd}</div>`;
+  }).join("");
+}
+
+// ---- events ----
+document.addEventListener("click",ev=>{
+  const t=ev.target.closest("[data-dom],[data-tab],[data-id],[data-adv],[data-cand]"); if(!t) return;
+  const e=cur(); S.focusQ=false;
+  if(t.dataset.dom) S.dom = S.dom===t.dataset.dom?null:t.dataset.dom;
+  else if(t.dataset.tab) S.tab=t.dataset.tab;
+  else if(t.dataset.id) S.sel=t.dataset.id;
+  else if(t.hasAttribute("data-adv")){ advance(e); S.tab=tabOf(e); }
+  else if(t.dataset.cand){ e.cand=t.dataset.cand; }
+  render();
+});
+document.addEventListener("change",ev=>{
+  const e=cur();
+  if(ev.target.matches("[data-cause]")) e.cause=ev.target.value;
+  if(ev.target.matches("[data-chk]")) e[ev.target.dataset.chk]=ev.target.checked;
+  S.focusQ=false; render();
+});
+document.addEventListener("input",ev=>{
+  if(ev.target.id==="q"){ S.q=ev.target.value; S.focusQ=true; renderList(); }
+});
+render();
+</script>
+</body>
+</html>
