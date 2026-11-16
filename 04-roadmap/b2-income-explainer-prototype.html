@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototype: Plain explainer for why income is asked (B2)</title>
+<style>
+  :root {
+    --bg: #f5f6f4; --surface: #ffffff; --ink: #1d2a2e; --muted: #55646a; --line: #c9d2ce;
+    --accent: #0b5d5b; --accent-ink: #ffffff; --err: #a3261c; --err-bg: #fbe9e7;
+    --note-bg: #eef3f1; --support-bg: #fff4d6; --support-line: #d9b44a;
+    color-scheme: light dark;
+    font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12191b; --surface: #1b2528; --ink: #e8eeee; --muted: #a2b2b6; --line: #34444a;
+      --accent: #5cc4bf; --accent-ink: #0d1517; --err: #ff9d94; --err-bg: #3d1f1c;
+      --note-bg: #1f2c2f; --support-bg: #3c3217; --support-line: #8a7230;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); line-height: 1.5; font-size: 16px; }
+  .proto-note { background: var(--note-bg); color: var(--muted); font-size: .8rem; padding: 6px 16px; text-align: center; border-bottom: 1px solid var(--line); }
+  main { max-width: 480px; margin: 0 auto; padding: 16px 16px 40px; }
+  .screen[hidden] { display: none; }
+  h1 { font-size: 1.4rem; line-height: 1.25; margin: 4px 0 10px; }
+  h1:focus { outline: none; }
+  p { margin: 0 0 10px; }
+  .muted { color: var(--muted); }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px; margin: 12px 0; }
+  label.q { display: block; font-weight: 600; font-size: 1.05rem; margin-bottom: 6px; }
+  .helper { color: var(--muted); font-size: .92rem; margin-bottom: 10px; }
+  .helper p { margin: 0 0 4px; }
+
+  input[type="text"] { width: 100%; font: inherit; font-size: 1.1rem; padding: 10px 12px; border: 2px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
+  input[aria-invalid="true"] { border-color: var(--err); }
+  .error { color: var(--err); background: var(--err-bg); border-radius: 6px; padding: 6px 10px; margin: 8px 0 0; font-size: .92rem; }
+  .error[hidden] { display: none; }
+
+  .why { margin: 12px 0 0; font-size: .95rem; }
+  .use { margin: 12px 0 0; border-top: 1px solid var(--line); padding-top: 10px; font-size: .9rem; }
+  .use h2 { font-size: .95rem; margin: 0 0 4px; }
+  .use ul { margin: 0; padding-left: 18px; color: var(--muted); }
+
+  button { font: inherit; cursor: pointer; }
+  .btn { width: 100%; padding: 12px 16px; border-radius: 6px; border: 2px solid var(--accent); background: var(--accent); color: var(--accent-ink); font-weight: 600; margin-top: 12px; }
+  .btn.secondary { background: transparent; color: var(--accent); }
+  .linkbtn { background: none; border: 0; padding: 4px 0; color: var(--accent); text-decoration: underline; font-size: .95rem; }
+  .row { display: flex; gap: 10px; }
+  .row .btn { margin-top: 12px; }
+  button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+  .figure { font-size: 1.6rem; font-weight: 700; margin: 4px 0 0; }
+  .support { background: var(--support-bg); border: 1px solid var(--support-line); border-radius: 8px; padding: 12px 14px; margin: 12px 0; }
+  .support[hidden] { display: none; }
+  .support .linkbtn { font-weight: 600; font-size: 1rem; }
+
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: flex; align-items: flex-end; justify-content: center; padding: 16px; }
+  .overlay[hidden] { display: none; }
+  .panel { background: var(--surface); color: var(--ink); border-radius: 10px; padding: 16px; width: 100%; max-width: 480px; }
+  .panel h2 { margin: 0 0 8px; font-size: 1.1rem; }
+  @media (min-width: 600px) { .overlay { align-items: center; } }
+</style>
+</head>
+<body>
+<div class="proto-note" id="protoNote"></div>
+
+<main>
+
+  <!-- Screen 1: entry point -->
+  <section class="screen" id="s1" aria-labelledby="s1h">
+    <h1 id="s1h" tabindex="-1"></h1>
+    <div class="card">
+      <p id="s1summary"></p>
+      <p class="muted" id="s1synthetic"></p>
+    </div>
+    <button class="btn" type="button" id="s1continue"></button>
+  </section>
+
+  <!-- Screen 2: income step (feature core) -->
+  <section class="screen" id="s2" aria-labelledby="s2h" hidden>
+    <h1 id="s2h" tabindex="-1"></h1>
+    <div class="card">
+      <label class="q" for="income" id="incomeLabel"></label>
+      <div class="helper" id="incomeHelper"></div>
+      <input type="text" id="income" name="income" inputmode="text" autocomplete="off"
+             aria-describedby="incomeHelper incomeError">
+      <p class="error" id="incomeError" role="alert" hidden></p>
+      <p class="why" id="why"></p>
+      <div class="use">
+        <h2 id="useTitle"></h2>
+        <ul id="useList"></ul>
+      </div>
+    </div>
+    <button class="linkbtn" type="button" id="contact2"></button>
+    <button class="btn" type="button" id="s2continue"></button>
+  </section>
+
+  <!-- Screen 3: confirmation -->
+  <section class="screen" id="s3" aria-labelledby="s3h" hidden>
+    <h1 id="s3h" tabindex="-1"></h1>
+    <div class="card">
+      <p class="muted" id="s3figLabel"></p>
+      <p class="figure" id="s3fig"></p>
+      <p id="s3next" style="margin-top:10px"></p>
+    </div>
+    <div class="support" id="s3support" hidden>
+      <p id="s3supportText"></p>
+      <button class="linkbtn" type="button" id="contact3zero"></button>
+    </div>
+    <button class="linkbtn" type="button" id="contact3"></button>
+    <div class="row">
+      <button class="btn secondary" type="button" id="s3back"></button>
+      <button class="btn secondary" type="button" id="s3restart"></button>
+    </div>
+  </section>
+
+</main>
+
+<!-- Contact placeholder panel (stays inside the flow) -->
+<div class="overlay" id="overlay" hidden>
+  <div class="panel" role="dialog" aria-modal="true" aria-labelledby="panelTitle">
+    <h2 id="panelTitle"></h2>
+    <p id="panelBody"></p>
+    <button class="btn" type="button" id="panelClose"></button>
+  </div>
+</div>
+
+<script>
+/* ------------------------------------------------------------------
+   FR8: all wording lives in this one config object.
+   "Seen by" and "Kept for" come from the PRD owner and still need
+   data-owner confirmation. Contact details are still [TBC].
+   Each sentence is kept to 20 words or fewer (FR7).
+------------------------------------------------------------------- */
+var COPY = {
+  protoNote: "Prototype with example data. Nothing is stored or sent.",
+
+  s1Title: "Let’s set up your plan",
+  s1Summary: "You have 3 open claims.",
+  s1Synthetic: "",
+  s1Continue: "Continue",
+
+  s2Title: "Your income",
+  incomeLabel: "How much money do you usually have coming in each month?",
+  helper: [
+    "Enter the amount you can count on in most months. Not your best month, not your worst."
+  ],
+  why: "So your plan fits what you can really pay.",
+  useTitle: "How we use it",
+  useLines: [
+    "Used only for your payment plan. Seen by collection agents.",
+    "Kept for 6 months."
+  ],
+  privacyLink: { text: "Privacy notice", url: "https://de.flow.riverty.com/de-de/datenschutz" },
+  contactLink: "Not sure what to enter? Contact us",
+  s2Continue: "Continue",
+
+  errEmpty: "Enter a number to continue",
+  errInvalid: "Use numbers only, for example 1400",
+
+  s3Title: "Thanks, we’ve got your figure",
+  s3FigLabel: "Per month",
+  s3Next: "Next: your plan options.",
+  s3SupportText: "Talk to a person. You can still continue.",
+  s3Back: "Back",
+  s3Restart: "Restart",
+
+  panelTitle: "Contact us",
+  panelBody: "[Contact channel and hours: TBC with operations]",
+  panelClose: "Close"
+};
+
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var lastValue = null;      // kept in memory only; gone on reload
+  var panelOpener = null;
+
+  /* ---------- render all copy from COPY ---------- */
+  function render() {
+    $("protoNote").textContent = COPY.protoNote;
+    $("s1h").textContent = COPY.s1Title;
+    $("s1summary").textContent = COPY.s1Summary;
+    $("s1synthetic").textContent = COPY.s1Synthetic;
+    $("s1synthetic").hidden = !COPY.s1Synthetic;
+    $("s1continue").textContent = COPY.s1Continue;
+
+    $("s2h").textContent = COPY.s2Title;
+    $("incomeLabel").textContent = COPY.incomeLabel;
+    var helper = $("incomeHelper");
+    helper.innerHTML = "";
+    COPY.helper.forEach(function (t) {
+      var p = document.createElement("p"); p.textContent = t; helper.appendChild(p);
+    });
+    $("why").textContent = COPY.why;
+    $("useTitle").textContent = COPY.useTitle;
+    var ul = $("useList");
+    ul.innerHTML = "";
+    COPY.useLines.forEach(function (t) {
+      var li = document.createElement("li"); li.textContent = t; ul.appendChild(li);
+    });
+    var pl = document.createElement("li");
+    var a = document.createElement("a");
+    a.textContent = COPY.privacyLink.text;
+    a.href = COPY.privacyLink.url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    pl.appendChild(a);
+    ul.appendChild(pl);
+    $("contact2").textContent = COPY.contactLink;
+    $("s2continue").textContent = COPY.s2Continue;
+
+    $("s3h").textContent = COPY.s3Title;
+    $("s3figLabel").textContent = COPY.s3FigLabel;
+    $("s3next").textContent = COPY.s3Next;
+    $("s3supportText").textContent = COPY.s3SupportText;
+    $("contact3zero").textContent = COPY.contactLink;
+    $("contact3").textContent = COPY.contactLink;
+    $("s3back").textContent = COPY.s3Back;
+    $("s3restart").textContent = COPY.s3Restart;
+
+    $("panelTitle").textContent = COPY.panelTitle;
+    $("panelBody").textContent = COPY.panelBody;
+    $("panelClose").textContent = COPY.panelClose;
+  }
+
+  /* ---------- screen switching ---------- */
+  function show(id) {
+    ["s1", "s2", "s3"].forEach(function (s) { $(s).hidden = (s !== id); });
+    var h = $(id).querySelector("h1");
+    window.scrollTo(0, 0);
+    h.focus();
+  }
+
+  /* ---------- FR5: parse the income entry ----------
+     Strips currency symbols and spaces. A dot or comma followed by exactly
+     three digits is a thousands separator ("1.400", "1,400" = 1400).
+     Any other dot or comma is a decimal and is rejected, as are letters
+     and negatives. 0 is valid. */
+  function parseIncome(raw) {
+    var s = raw.replace(/[€$£\s\u00a0]/g, "");
+    if (s === "") return { status: "empty" };
+    if (/^\d+$/.test(s)) return { status: "ok", value: parseInt(s, 10) };
+    if (/^\d{1,3}([.,]\d{3})+$/.test(s)) {
+      return { status: "ok", value: parseInt(s.replace(/[.,]/g, ""), 10) };
+    }
+    return { status: "invalid" };
+  }
+
+  function showError(msg) {
+    var e = $("incomeError");
+    e.textContent = msg;
+    e.hidden = false;
+    $("income").setAttribute("aria-invalid", "true");
+    $("income").focus();
+  }
+  function clearError() {
+    $("incomeError").hidden = true;
+    $("income").removeAttribute("aria-invalid");
+  }
+
+  /* ---------- flow ---------- */
+  $("s1continue").addEventListener("click", function () { show("s2"); $("income").focus(); });
+
+  $("s2continue").addEventListener("click", function () {
+    var r = parseIncome($("income").value);
+    if (r.status === "empty") { showError(COPY.errEmpty); return; }
+    if (r.status === "invalid") { showError(COPY.errInvalid); return; }
+    clearError();
+    lastValue = r.value;
+    console.log("income_step_completed"); // console only: no storage, no network
+    $("s3fig").textContent = lastValue.toLocaleString("en");
+    $("s3support").hidden = (lastValue !== 0);
+    show("s3");
+  });
+
+  $("income").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); $("s2continue").click(); }
+  });
+  $("income").addEventListener("input", clearError);
+
+  $("s3back").addEventListener("click", function () { show("s2"); $("income").focus(); });
+  $("s3restart").addEventListener("click", function () {
+    $("income").value = "";
+    lastValue = null;
+    clearError();
+    show("s1");
+  });
+
+  /* ---------- contact panel (FR6) ---------- */
+  function openPanel(opener) {
+    panelOpener = opener;
+    $("overlay").hidden = false;
+    $("panelClose").focus();
+  }
+  function closePanel() {
+    $("overlay").hidden = true;
+    if (panelOpener) panelOpener.focus();
+  }
+  ["contact2", "contact3", "contact3zero"].forEach(function (id) {
+    $(id).addEventListener("click", function () { openPanel($(id)); });
+  });
+  $("panelClose").addEventListener("click", closePanel);
+  $("overlay").addEventListener("click", function (e) { if (e.target === $("overlay")) closePanel(); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !$("overlay").hidden) closePanel();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
